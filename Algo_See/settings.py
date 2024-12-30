@@ -74,23 +74,49 @@ WSGI_APPLICATION = 'Algo_See.wsgi.application'
 ASGI_APPLICATION = 'Algo_See.asgi.application'
 
 
+# CHANNEL_LAYERS = {
+#             'default': {
+#                 "BACKEND": "channels.layers.InMemoryChannelLayer",
+#             }
+#         }
+
 CHANNEL_LAYERS = {
-            'default': {
-                "BACKEND": "channels.layers.InMemoryChannelLayer",
-            }
+	"default": {
+		# "BACKEND": "channels_redis.pubsub.RedisPubSubChannelLayer",
+		"BACKEND": "channels_redis.core.RedisChannelLayer",
+		"CONFIG": {
+            "hosts": [("localhost", 6379)],
+            "capacity": 100000,
+            "expiry": 2,
+		},
+	},
+}
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'AlgoTrainer_Prod',
+        'USER':'root',
+        "HOST":'localhost',
+        'PASSWORD':'AlgoTrainer@!0000',
+        'OPTIONS': {
+            'charset': 'utf8mb4',
+            'use_unicode': True,
         }
+    }
+}
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
-RESTART_DAPHNE_CMD = 'python manage.py runserver'
+# RESTART_DAPHNE_CMD = 'python manage.py runserver'
 
 DATA_UPLOAD_MAX_MEMORY_SIZE = 9621440
 
@@ -146,3 +172,12 @@ MEDIA_URL = '/media/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+
+try :
+    from .local_settings import *
+    print("Running Development Server......")
+except: 
+    IS_LIVE = True
+    print("Running Production Server......")
