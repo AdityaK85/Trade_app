@@ -1,0 +1,166 @@
+{% load static %}
+
+<style>
+    .edit-input {
+        display: none;
+    }
+
+    .toggle{
+        width: 100% !important;
+        height: 20% !important;
+    }
+
+    .toggle-on.btn {
+        padding-right: 7.5rem;
+        margin-top: -7px;
+        font-size: 21px;
+    }
+
+    .toggle-off.btn {
+        padding-left: 1.5rem;
+        margin-top: -7px;
+        font-size: 21px;
+    }
+
+    .vertical-separator {
+        border-left: 1px solid #ddd;
+        height: 30px;
+        margin: 10px 10px;
+    }
+</style>
+
+<!-- <div class="topnav">
+    <div class="container-fluid">
+        <nav class="navbar navbar-light navbar-expand-lg topnav-menu">
+
+            <div class="collapse navbar-collapse" id="topnav-menu-content">
+
+                <ul class="nav nav-tab me-auto d-flex nav-tabs-custom justify-content-center pt-2" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-bs-toggle="tab" id="niftyTab" href="#nfty_tab" role="tab">
+                           NIFTY <span class="badge bg-success mx-2 rounded-pill" id="nifty_open_pos_count" >{% if nifty_open_pos %}{{nifty_open_pos}}{% endif %}</span>
+                        </a>
+                    </li>
+
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" id="bankNiftyTab" href="#bnknfy_tab" role="tab">
+                           BANKNIFTY   <span class="badge bg-success mx-2 rounded-pill" id="bnf_open_pos_count" >{% if bnf_open_pos %}{{bnf_open_pos}}{% endif %}</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" id="equityTab" href="#equity_tab" role="tab">
+                           EQUITY   <span class="badge bg-success mx-2 rounded-pill" id="equity_open_pos_count" >{% if equity_open_pos %}{{equity_open_pos}}{% endif %}</span>
+                        </a>
+                    </li>
+                </ul>
+
+        
+
+                <ul class="navbar-nav ms-auto">
+
+
+                    <li class="nav-item mt-2" style="width: 160px;">
+                        <a class="nav-link" style="
+                            display: flex; 
+                            align-items: center; 
+                            justify-content: space-evenly; 
+                            padding: 6px 18px;  
+                            font-size: 16px; 
+                            transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s; 
+                            position: relative;
+                        " id="" role="button">
+                            <span style="flex-grow: 1; text-align: left; color: #495057;">
+                                MTM
+                            </span>
+                            <span id="user_{{user.id}}" style="font-weight: bold; color: #007bff;">---</span>
+                        </a>
+                    </li>
+                    
+                    <span class="vertical-separator"></span>
+
+                    <li class="nav-item" style=" width: 185px;font-weight: bold;">
+                        <a class="nav-link arrow-none" role="button"  style="display: flex ;width: max-content;" >
+                            <span key="t-dashboards" class="text-muted">Profit </span> :
+                            <span class="mx-2 text-success" >
+                                <i style="font-style: normal;" id="profit-value-{{user.id}}"> {% if user.trading_mode == 'Live' %} {% if targ_sl.live_target %}{{ targ_sl.live_target }}{% else %}---{% endif %} {% else %} {% if targ_sl.target %}{{ targ_sl.target }}{% else %}---{% endif %}  {% endif %} </i>
+                                <input type="text" id="edit-profit-{{user.id}}" class="form-control edit-input" style="width: 50% !important ;padding: 4px !important;" placeholder="Enter Profit" 
+
+                                {% if user.trading_mode == 'Live' %}
+                                value="{% if targ_sl.live_target %}{{ targ_sl.live_target }}{% endif %} "
+                                {% else %}
+                                value="{% if targ_sl.target %}{{ targ_sl.target }}{% endif %} "
+                                {% endif %}
+
+                                >
+                                <button id="save-btn" class="btn btn-sm btn-success edit-input" onclick="save_target_sl( 'profit-value-{{user.id}}', 'edit-profit-{{user.id}}', 'save-btn', 'edit-icon', 'Profit', '{{user.trading_mode}}')" style="width: auto !important;" ><i class="fas fa-save" ></i></button>
+                            </span>
+                            <i class="fas fa-edit" id="edit-icon" style="cursor: pointer;    float: inline-end;" onclick="edit_target_sl('profit-value-{{user.id}}', 'edit-profit-{{user.id}}', 'save-btn', 'edit-icon')" ></i>
+                        </a>
+                    </li>
+
+                    <span class="vertical-separator"></span>
+
+                    <li class="nav-item" style=" width: 185px;font-weight: bold;">
+                        <a class="nav-link arrow-none" role="button" style="display: flex ;width: max-content;" >
+                            <span key="t-dashboards" class="text-muted">Loss</span> :
+                            <span class="mx-2 text-success" style="color: rgb(207, 13, 6) !important;">
+                                <i style="font-style: normal;" id="loss-value-{{user.id}}"> {% if user.trading_mode == 'Live' %} {% if targ_sl.live_sl %}{{ targ_sl.live_sl }}{% else %}---{% endif %} {% else %}  {% if targ_sl.sl %}{{ targ_sl.sl }}{% else %}---{% endif %}  {% endif %}</i>
+                                <input type="text" id="edit-loss-{{user.id}}" class="form-control edit-input" style="width: 50% !important ;padding: 4px !important;" placeholder="Enter Loss" 
+
+                                {% if user.trading_mode == 'Live' %}
+                                value="{% if targ_sl.live_sl %}{{ targ_sl.live_sl }}{% endif %}"
+                                {% else %}
+                                value="{% if targ_sl.sl %}{{ targ_sl.sl }}{% endif %}"
+                                {% endif %}
+                                
+                                >
+                                <button id="save-btn-loss" class="btn btn-sm btn-success edit-input" onclick="save_target_sl( 'loss-value-{{user.id}}', 'edit-loss-{{user.id}}', 'save-btn-loss', 'edit-icon-loss', 'Loss', '{{user.trading_mode}}')" style="width: auto !important;" ><i class="fas fa-save" ></i></button>
+                            </span>
+                            <i class="fas fa-edit" id="edit-icon-loss" style="cursor: pointer;float: inline-end;" onclick="edit_target_sl('loss-value-{{user.id}}', 'edit-loss-{{user.id}}', 'save-btn-loss', 'edit-icon-loss')" ></i>
+                        </a>
+                    </li>
+
+                    <span class="vertical-separator"></span>
+
+                    <li class="nav-item" style="font-weight: bold; display: flex; align-items: center;">
+                        <a class="nav-link arrow-none" role="button" style="padding-right: 0;width: 140px;">
+                            <span key="t-dashboards" class="text-muted mx-1">Mode :</span> 
+                        </a>
+                        <input type="checkbox" id="checkbox_service" onchange="change_trading_mode(this , '{% if user.trading_mode == 'Live' %}true{% else %}false{% endif %}' )" {% if user.trading_mode == 'Live' %} checked {% endif %} data-on="LIVE" data-off="PAPER" data-onstyle="success" data-offstyle="info" data-toggle="toggle">
+                    </li>
+
+                    {% if user.trading_mode == 'Paper' %}
+
+                        <span class="vertical-separator"></span>
+
+                        {% if remaining_days < 0 %}
+                        
+                        <li class="nav-item" style="font-weight: bold; display: flex; align-items: center;">
+                            <button id="subscribe-btn" class="btn  btn-primary" onclick="window.open('https://superprofile.bio/vp/670e7cacbe8a640013b28990', '_blank')"  > Subscribe</button>
+                        </li>
+                        
+                        {% else %}
+                        <div class="d-flex align-items-center ">
+                            <div class="mt-3" style="line-height: 0px;" >
+                                <p>Remaining</p>
+                                <p class="" >{{remaining_days}} Days</p>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                    {% endif %}
+                    
+                    <span class="vertical-separator"></span>
+
+                    <li class="nav-item" style="font-weight: bold; display: flex; align-items: center;">
+                        <button id="reset-btn" class="btn  btn-danger" onclick="reset_trades('{{user.id}}')" ><i class="fa-solid fa-rotate-right"></i> Reset</button>
+                    </li>
+
+                </ul>
+
+            </div>
+        </nav>
+    </div>
+</div> -->

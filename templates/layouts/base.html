@@ -1,0 +1,246 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+    <head>
+        
+        <meta charset="utf-8" />
+        <title>{% block Title %}{% endblock  %}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta content="Trade24Hr" name="description" />
+        <meta content="Trade24Hr" name="author" />
+        <!-- App favicon -->
+        <link rel="shortcut icon" href="{% static 'clientpanel/assets/images/favicon.ico' %} ">
+
+        <!-- Bootstrap Css -->
+        <link href="{% static 'clientpanel/assets/css/bootstrap.min.css' %}" id="bootstrap-style" rel="stylesheet" type="text/css" />
+        <!-- Icons Css -->
+        <link href="{% static 'clientpanel/assets/css/icons.min.css' %}" rel="stylesheet" type="text/css" />
+        <!-- App Css-->
+        <link href="{% static 'clientpanel/assets/css/app.css' %}" id="app-style" rel="stylesheet" type="text/css" />
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.12/dist/sweetalert2.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+        <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/reconnecting-websocket/1.0.0/reconnecting-websocket.js'></script>
+
+        
+        <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
+
+        {% block customCDN %}{% endblock  %}
+        {% block customStyle %}{% endblock  %}
+
+        <style>
+
+            #preloader {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: rgba(0, 0, 0, 0.4);
+                z-index: 9999;
+            }
+
+            
+            .sidebar {
+                height: 100vh;
+                border-right: 1px solid #e0e0e0;
+            }
+    
+            .content {
+                padding: 20px;
+            }
+    
+            .step {
+                margin-bottom: 20px;
+            }
+    
+            .step h6 {
+                font-weight: bold;
+                color: #495057;
+            }
+    
+            .step p,
+            .step ul {
+                margin: 0;
+                padding: 0;
+                list-style-type: none;
+            }
+    
+            .step ul {
+                margin-top: 10px;
+            }
+    
+            .step ul li {
+                margin-bottom: 10px;
+            }
+    
+            .card-header {
+                background-color: #f8f9fa;
+                font-weight: bold;
+            }
+    
+            .card-body label {
+                font-weight: bold;
+            }
+    
+            .btn-primary,
+            .btn-success {
+                width: 100%;
+            }
+        
+
+            .error_class
+            {
+                border: 1px solid rgb(218, 12, 12)  !important;;
+            }
+
+
+            @media (min-width: 1200px) {
+                body[data-layout=horizontal] .container-fluid, body[data-layout=horizontal] .navbar-header {
+                    max-width: 97%;
+                }
+            }
+        </style>
+    </head>
+
+    <body data-topbar="light" data-layout="horizontal" data-layout-mode="dark" class="">
+
+        <!-- Begin page -->
+        <div id="app"></div>
+        <div id="layout-wrapper">
+
+            {% include "layouts/header.html" %}
+            
+            {% include "layouts/sidebar.html" %}
+            
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+
+            <input type="hidden" name=""  style="display: none;" id="user_id" >
+            <div class="main-content">
+
+                <div class="page-content" style="margin-top: 11px !important;">
+
+                        <div id="preloader">
+                            <div id="status">
+                                <div class="spinner-chase">
+                                    <div class="chase-dot"></div>
+                                    <div class="chase-dot"></div>
+                                    <div class="chase-dot"></div>
+                                    <div class="chase-dot"></div>
+                                    <div class="chase-dot"></div>
+                                    <div class="chase-dot"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {% block Content %}{% endblock  %}
+
+                        
+                        
+                </div>
+                
+                {% include 'layouts/footer.html' %}
+
+            </div>
+            <!-- end main content-->
+
+        </div>
+        <!-- END layout-wrapper -->
+
+        <!-- Right Sidebar -->
+        
+        <!-- /Right-bar -->
+
+        <!-- Right bar overlay-->
+
+        <div class="modal fade bs-example-modal-center" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered ">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Change Password</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div id="oldPass_div" >
+                        <div class="modal-body" >
+                            <div class="mb-3">
+                                <label for="recipient-name" class="col-form-label">Old Password:</label>
+                                <div class="input-group auth-pass-inputgroup">
+                                    <input type="text" class="form-control" id="old_password" onkeydown="removeError('old_password')" maxlength="15">
+                                    <button class="btn btn-light " type="button" ><i id="old_passicon" onclick="toggleOldPass()" class="mdi mdi-eye-outline"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer" style="justify-content: center;">
+                            
+                            <button type="button" class="btn btn-primary" style="width: 30%;" onclick="check_oldpass(this,'{{request.session.client_userId}}','old_password')">Submit</button>
+                        </div>
+                    </div>
+
+                    <div id="changePass_div" style="display: none;">
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="recipient-name" class="col-form-label">New Password:</label>
+                                <div class="input-group auth-pass-inputgroup">
+                                    <input type="text" class="form-control" id="new_password" onkeydown="removeError('new_password')" maxlength="10">
+                                    <button class="btn btn-light " type="button" id="password-addon"><i class="mdi mdi-eye-outline"></i></button>
+                                </div>
+                                
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="recipient-name" class="col-form-label">ReEnter Password:</label>
+                                <div class="input-group auth-pass-inputgroup">
+                                    <input type="text" class="form-control" id="confirm_password" onkeydown="removeError('confirm_password')" maxlength="10">
+                                    <button class="btn btn-light " type="button" ><i class="mdi mdi-eye-outline" id="icon_confirm_pass" onclick="toggle_confirmPass()"></i></button>
+                                </div>
+                               
+                            </div>
+                        </div>
+                        <div class="modal-footer" style="justify-content: center;">
+                            
+                            <button type="button" class="btn btn-primary" style="width: 30%;" onclick="changePass(this,'{{request.session.client_userId}}','new_password','confirm_password')">Submit</button>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+
+
+        <div class="rightbar-overlay"></div>
+
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.12/dist/sweetalert2.all.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js"></script>
+
+        <!-- JAVASCRIPT -->
+        <script src="{% static 'clientpanel/assets/libs/jquery/jquery.min.js' %} "></script>
+        <script src="{% static 'clientpanel/assets/libs/bootstrap/js/bootstrap.bundle.min.js' %} "></script>
+        <script src="{% static 'clientpanel/assets/libs/metismenu/metisMenu.min.js' %} "></script>
+        <script src="{% static 'clientpanel/assets/libs/simplebar/simplebar.min.js' %} "></script>
+        <script src="{% static 'clientpanel/assets/libs/node-waves/waves.min.js' %} "></script>
+        <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
+
+        <!-- apexcharts -->
+        <script src="{% static 'clientpanel/assets/libs/apexcharts/apexcharts.min.js' %} "></script>
+
+        <script src="{% static 'clientpanel/assets/js/pages/dashboard.init.js' %} "></script>
+
+        <script src="{% static 'clientpanel/assets/js/app.js' %} "></script>
+
+        <script type="module" src="{% static 'client_js/index.js' %}"></script>
+
+
+        {% block customJS %}{% endblock  %}
+        {% block customJscript %}{% endblock  %}
+        
+
+
+    </body>
+</html>

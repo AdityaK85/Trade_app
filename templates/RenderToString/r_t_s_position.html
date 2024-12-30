@@ -1,0 +1,88 @@
+<table class="table  table-striped text-center" style="zoom: 90%;" id="nfty_tbl" > 
+    <thead class="">
+        <tr>
+            <th class="align-middle">STRIKE</th>
+            <th class="align-middle">LOT</th>
+            <th class="align-middle">OS</th>
+            <th style="width: 10%;"  class="align-middle">SL</th>
+            <th style="width: 10%;"  class="align-middle">TARGET</th>
+            <th style="width: 10%;text-align: center;" class="align-middle">LTP</th>
+            <th style="text-align: center;" class="align-middle">MTM</th>
+            <th class="align-middle">ENTRY</th>
+            <th class="align-middle">EXIT </th>
+            <th class="align-middle">STATUS</th>
+            <th class="align-middle">P&L</th>
+            <th class="align-middle">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for i in current_pos %}
+            <tr class="text-center" id="tr_{{i.id}}"  >
+                <td  id="strike_{{i.id}}" >{% if i.tradingSymbol %}{{ i.tradingSymbol }}{% else %}-{% endif %} </td>
+                <td  id="lot_size_{{i.id}}">{% if i.fk_strategy.lot_size %}{{ i.fk_strategy.lot_size }}{% else %}-{% endif %}</td>
+                <td  id="os_{{i.id}}">{% if i.order_obj.order_side %}{{ i.order_obj.order_side }}{% else %}-{% endif %}</td>
+                
+                <td  style="width: 10%;"  id="stop_loss"  ><span class="mx-2 change_td_to_input" data-id='{{i.id}}' data-type="stop_loss"  style="display: flex;justify-content: center;cursor: pointer" id="stop_loss_{{i.id}}" >{% if i.stop_loss %}{{ i.stop_loss|floatformat:2 }}{% endif %}</span> 
+                    <i onclick="
+                    change_td_to_input(
+                    this, 
+                    'stop_loss_{{i.id}}', 
+                    'stop_loss_{{i.id}}_icon', 
+                    'stop_loss', 
+                    '{{i.id}}', 
+                    'lot_size_{{i.id}}')" id="stop_loss_{{i.id}}_icon" class="fas fa-pencil-alt edit-icon" style="cursor: pointer;{% if i.stop_loss %}display:none{% endif %}"></i>   </td>
+
+                <td  style="width: 10%;"  id="full_target"  ><span class="mx-2 change_td_to_input" data-id='{{i.id}}' data-type="full_target"  style="display: flex;justify-content: center;cursor: pointer" id="full_target_{{i.id}}" >{% if i.full_target %}{{ i.full_target|floatformat:2 }}{% endif %}</span> 
+                    <i onclick="
+                    change_td_to_input(
+                    this, 
+                    'full_target_{{i.id}}', 
+                    'full_target_{{i.id}}_icon', 
+                    'full_target', 
+                    '{{i.id}}', 
+                    'lot_size_{{i.id}}')" id="full_target_{{i.id}}_icon" class="fas fa-pencil-alt edit-icon" style="cursor: pointer;{% if i.full_target %}display:none{% endif %}"></i>   </td>
+
+                
+                <td  style="font-weight: bold; width: 95px; min-width: 74px;" class="nfty_{{i.subscribe_token}}_ltp" >- </td>
+                <td  style="width: 74px; min-width: 95px;" id="pnl_{{i.id}}"  >- </td>
+                <td  id="entry_{{i.id}}" > {% if i.order_obj.entryPrice %} {{i.order_obj.entryPrice|floatformat:2}} {% else %} - {% endif %} </td>
+                <td  id="exit_{{i.id}}" > {% if i.order_obj.exitPrice %} {{i.order_obj.exitPrice|floatformat:2}} {% else %} - {% endif %}  </td>
+                <td  id="status_{{i.id}}" > 
+                        {% if i.order_obj.status %} 
+                    
+                        {% if i.pos_status == 'REJECTED' %}
+                            <span style="font-size: 100%;" class="badge bg-danger" >{{i.pos_status}}</span>
+                        {% elif i.order_obj.status == 'OPEN' %}
+                            <span style="font-size: 100%;" class="badge bg-success" >{{i.order_obj.status}}</span>
+                        {% elif i.order_obj.status == 'CLOSED' %}
+                            <span style="font-size: 100%;" class="badge bg-danger" >{{i.order_obj.status}}</span>
+                        {% elif i.order_obj.status == 'ERROR' %}
+                            <span style="font-size: 100%;" class="badge bg-danger" >{{i.order_obj.status}}</span>
+                        {% else %}
+                            <span style="font-size: 100%;" class="badge bg-warning" >Pending</span>
+                        {% endif %}
+            
+                    {% else %} <span style="font-size: 100%;" class="badge bg-warning" >Pending</span> {% endif %}
+                </td>
+                <td style="width: 74px; min-width: 74px;" id="realizedPNL_{{i.id}}" >{% if i.order_obj.realizedPNL or i.order_obj.realizedPNL == 0.0  %}{{i.order_obj.realizedPNL}}{% else %}-{% endif %}</td>
+                <td  id="action_{{i.id}}" style="display: flex;" > 
+            
+                    {% if i.order_obj.status == 'OPEN' and i.pos_status != 'REJECTED' %}
+                    <a role="button" onclick="square_off_pos('{{i.order_obj.id}}', '{{i.order_obj.order_mode}}', this)"  title="Square Off"  role="button" class="btn btn-sm btn-primary"  style="width: auto;height: 100%;"   ><i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+                    {% endif %}
+                    
+                    {% if i.pos_status == 'REJECTED' %}
+                        <span class="mx-2" >Something went wrong! Please regenerate token and try again</span>
+                    {% elif i.order_obj.status %}
+                        <span class="mx-2" >{% if i.order_obj.remark %}{{i.order_obj.remark}}{% else %}-{% endif %}</span>
+                    {% else %}
+                        <a role="button"  onclick="delete_pos('{{i.id}}', '{{i.order_obj.order_mode}}', this)"  title="Delete" role="button" class="btn btn-sm btn-danger"   style="width: auto;" ><i class="fa-solid fa-xmark"></i></a>
+                    {% endif %}
+                    
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+

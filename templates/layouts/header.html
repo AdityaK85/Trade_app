@@ -1,0 +1,86 @@
+{% load static %}
+<style>
+    .market-value {
+        display: inline-block;
+        width: 55px; /* Adjust width as needed */
+        text-align: -webkit-center;
+      }
+      .market-change {
+        display: inline-block;
+        width: 80px; /* Adjust width as needed */
+        text-align: left; /* Align text to the left */
+      }
+    
+</style>
+
+<header id="page-topbar">
+    <div class="navbar-header">
+        <ul class="list-inline d-flex flex-wrap text-white mb-0">
+            
+
+            <li class="list-inline-item p-2  rounded shadow-sm me-2">
+                <div><strong>NIFTY BANK </strong></div>
+                <div id="26009_feed_div" >
+                    <span class="market-value" id="26009" >0</span>
+                    <span class="market-change "><span id="26009_arrow"></span> (<span id="26009_change" >0</span> %)</span>
+                </div>
+            </li>
+      
+            <li class="list-inline-item p-2  rounded shadow-sm me-2">
+              <div><strong>NIFTY 50</strong></div>
+              <div id="26000_feed_div">
+                <span class="market-value " id="26000" >0</span>
+                <span class="market-change "><span id="26000_arrow"></span> (<span id="26000_change" >0</span>%)</span>
+              </div>
+            </li>
+      
+            
+            
+        </ul>
+
+        <ul class="list-inline d-flex flex-wrap text-white mb-0" style="display: flex;">
+            
+
+            <li class="list-inline-item p-2  rounded shadow-sm me-2">
+                <div><strong>TIMING </strong></div>
+                <div id="time" >
+                    <span class="market-value" id="timing" style="width: fit-content;" >dd-mm-yyyy HH:MM:SEC</span>
+                </div>
+            </li>
+        </ul>
+
+        <div class="d-flex">
+
+            <div class="dropdown d-inline-block">
+
+                <div class="dropdown d-inline-block">
+                    <div class="form-check form-switch form-switch-lg mb-3" dir="ltr">
+                        <input class="form-check-input" onchange="changeTheme(this)" type="checkbox" id="SwitchCheckSizelg" checked="">
+                        <label class="form-check-label" for="SwitchCheckSizelg"></label>
+                    </div>
+                </div>
+
+                
+
+                <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown"
+                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <img class="rounded-circle header-profile-user" src="{% static 'clientpanel\assets\images\profile_icon.png' %} "
+                        alt="Header Avatar">
+                    <span class="d-none d-xl-inline-block ms-1" key="t-henry">{{user.name}}</span>
+                    <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
+                </button>
+                <div class="dropdown-menu dropdown-menu-end">
+                    <a class="dropdown-item text-danger" href="/logout_handler"><i class="bx bx-power-off font-size-16 align-middle me-1 text-danger"></i> <span key="t-logout">Logout</span></a>
+                
+                    <a class="dropdown-item text-danger" href="#" data-bs-toggle="modal" data-bs-target=".bs-example-modal-center"><i class="bx bx-key font-size-16 align-middle me-1 text-danger"></i> <span key="t-logout">Change Password</span></a>
+                    {% if mastertrust_obj %}
+                        <a class="dropdown-item text-danger" role="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"><i class="bx bx-repeat font-size-16 align-middle me-1 text-danger"></i> <span key="t-logout">Change Broker Details</span></a>
+                    {% endif %}
+                </div>
+                
+            </div>
+
+
+        </div>
+    </div>
+</header>

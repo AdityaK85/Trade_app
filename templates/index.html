@@ -1,0 +1,153 @@
+{% extends "layouts/base.html" %}
+{% block Title %}{% endblock  %}
+{% load static %}
+
+{% block customCDN %}{% endblock  %}
+
+{% block customStyle %}
+
+<style>
+    .bullish {
+      color: green;
+      font-weight: bold;
+    }
+
+    .bearish {
+      color: red;
+      font-weight: bold;
+    }
+
+    .neutral {
+      color: orange;
+      font-weight: bold;
+    }
+
+    .highlight-green {
+      background-color: #e7f9e7;
+    }
+
+    .highlight-red {
+      background-color: #fdeaea;
+    }
+  </style>
+{% endblock  %}
+
+{% block Content %}
+
+<div class="container-fluid">
+
+  <div class="row">
+    <div class="col-3">
+      <div class="card custom-card rounded-0" style="display: block;border-radius: 0px;" id="order_excution_card">
+        <div class="card-body custom-card-body">
+          <div class="row">
+    
+            <div class="col-md-6 mt-1">
+              <label for="indexSelect" class="form-label">Select Index</label>
+              <select id="indexSelect" class="form-select" onchange="getStrikePrice(this.value)">
+                <option value="NIFTY">NIFTY</option>
+                <option value="BANKNIFTY">BANK NIFTY</option>
+              </select>
+            </div>
+    
+            <div class="col-md-6 mt-1">
+              <label for="strikePrice" class="form-label">Strike Price <span id="strike_ltp"
+                  style="float: right;">---</span></label>
+              <select id="strike_price" onchange="removeError('strike_price');" class="form-select">
+                <option value="" disabled selected>Loading...</option>
+              </select>
+            </div>
+    
+            <div class="col-md-6 mt-1">
+              <label for="orderType" class="form-label">Order Type</label>
+              <select id="option_type" class="form-select">
+                <option value="CE">CE</option>
+                <option value="PE">PE</option>
+              </select>
+            </div>
+    
+            <div class="col-md-6 mt-1">
+              <label for="lotSize" class="form-label">Lot Size</label>
+              <input type="text" id="lotSize" class="form-control" oninput="removeError('lotSize'); 
+                        this.value = this.value.replace(/[^0-9]/g, '').substring(0, 5); 
+                        if (this.value > 100) this.value = 100;"  placeholder="Enter Lot Size" />
+            </div>
+    
+            <div class="col-md-6 mt-1">
+              <label for="orderSide" class="form-label">Order Side</label>
+              <select id="orderSide" class="form-select">
+                <option value="BUY">Buy</option>
+                <option value="SELL">Sell</option>
+              </select>
+            </div>
+    
+            <div class="col-md-6 mt-1">
+              <label for="priceType" class="form-label">Price</label>
+              <select id="priceType" class="form-select" onchange="toggleLimitPriceField(this)">
+                <option value="Market">Market</option>
+                <option value="Limit">Limit</option>
+              </select>
+            </div>
+    
+            <div class="col-md-6 mt-1" id="limitPriceField">
+              <label for="limitPrice" class="form-label">Limit Price</label>
+              <input type="number" id="limitPrice" onchange="removeError('limitPrice');" class="form-control" placeholder="Enter Limit Price" />
+            </div>
+    
+            <div class="col-md-6 mt-1">
+              <label for="stopLoss" class="form-label">Stop Loss</label>
+              <input type="number" id="stopLoss" class="form-control" placeholder="Enter Stop Loss" />
+            </div>
+    
+            <div class="col-md-6 mt-1">
+              <label for="target" class="form-label">Target</label>
+              <input type="number" id="target" class="form-control" placeholder="Enter Target" />
+            </div>
+    
+            <div class="col-md-12 mt-3" >
+              <button class="btn btn-primary" onclick="SaveBreakoutStretegy(this)">Place Order</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-9">
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+              <div class="sale-statistic-inner notika-shadow mg-tb-30">
+                <div class="curved-inner-pro" style="display: flex;justify-content: space-between;">
+                  <div class="curved-ctn"> <h5>POSITIONS</h5></div>
+                  <div class="curved-ctn"> <h5>MTM : <span id="user_{{user.id}}" >---</span> </h5> </div>
+                </div>
+                <hr style="border: none; border-top: 1px solid #000; transform: scaleY(0.5); margin: 10px 0;">
+                <div id="position-tables" class="bsc-tbl" style="overflow: auto;" >
+                  {{nft_rendered}}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+{% endblock  %}
+
+
+{% block customJS %}
+
+<script type="module" src="{% static 'client_js/index.js' %}"></script>
+<script type="module" src="{% static 'client_js/dashboard.js' %}"></script>
+
+{% endblock  %}
+
+
