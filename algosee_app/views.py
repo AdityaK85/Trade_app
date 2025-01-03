@@ -50,18 +50,20 @@ def index(request, user):
     return render(request, 'index.html', context)
 
 
+def technical_chart(request):
+    return render(request, 'chart.html')
 
-# import requests
-# import pandas as pd
-# import json
+import requests
+import pandas as pd
+import json
 
 # # URL to fetch the data
-# url = 'https://history.truedata.in/getticks?symbol=NIFTY25010224000CE&bidask=1&from=241227T09:15:00&to=241227T15:30:00&response=JSON'
-# token = 'Bearer qbFIT1Oy-z6WkE-ocb3t54yK_lP3kQ68XbsUmzJnkJ8MUAvRVMUwQhO4m-xg8QsWUI1iyV3gcnECBrg9ffGaRZ_GBePo47_3cjLInMJkjTfDa0krfXeVq2vh2O2ilcYWd6MJwNFEx6u7zBGDprXwvSMpGJfpJ4l5q4UIV3MvR_bfrrpk4iiHfHROpV9TLMzfyscd8_HlsPb9swfn_LduA_ksRJVdGCblPbR4ACucoMzXgLKPPaBdO2TuUXnImRLDPpECf6O-rH3iqBaDKPBpKA'
+# url = 'https://history.truedata.in/getticks?symbol=NIFTY25010223500CE&bidask=1&from=241231T09:15:00&to=241231T15:30:00&response=JSON'
+# token = 'Bearer yLKUdeGXKYh_Z_IO2E4EViq0pt1sMwlyLCBePhwV7YRY1Qk_s6qsbUOD2hRjC4RXqbrdS5fs2ZwBBhCnKnLGErwX2uwrr9Yn1OpBPRb7P7pcgO2ggalwz9zScWB2DbYvAqB7YLx1SHbHC9k_x4cIs1p6rN9KpDebuieilkUihKRI63Prg8q3imz5jNR3xMICZRAxLoIE-eZSfY7aee8F7YcjvIBjBwNdz7JWq4bh4bOnuBoqQrwDn7ZIr9TDw1hhrqdD4rYU4JxWJhznjZyqjg'
 
 
 # # Output CSV filename
-# output_file = '52538.csv'
+# output_file = '52497.csv'
 
 # try:
 #     # Make a GET request to fetch the data

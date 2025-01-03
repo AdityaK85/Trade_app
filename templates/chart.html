@@ -1,0 +1,34 @@
+{% extends "layouts/base.html" %}
+{% block Title %}{% endblock  %}
+{% load static %}
+
+{% block customCDN %}
+ 
+{% endblock  %}
+
+{% block customStyle %}
+<style>
+
+</style>
+{% endblock  %}
+
+{% block Content %}
+
+<div class="container-fluid">
+<div id="tv_chart_container"></div>
+</div>
+
+{% endblock  %}
+
+
+{% block customJS %}
+
+ <script type="text/javascript" src="https://trading-terminal.tradingview-widget.com/charting_library/charting_library.standalone.js" ></script>
+    <script type="text/javascript" src="https://trading-terminal.tradingview-widget.com/datafeeds/udf/dist/bundle.js" ></script>
+    <script type="text/javascript" src="https://trading-terminal.tradingview-widget.com/broker-sample/dist/bundle.js" ></script>
+
+<script type="module" src="{% static 'client_js/chart.js' %}"></script>
+
+{% endblock  %}
+
+

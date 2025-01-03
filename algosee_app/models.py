@@ -10,6 +10,7 @@ import datetime
 class AdminMaster(models.Model):
     username = models.CharField(max_length=200 , null=True  , blank=True)
     password = models.CharField(max_length=200 , null=True  , blank=True)
+    trade_mode = models.CharField(max_length=200 , null=True  , blank=True, default='LIVE')  # PAPER AFTER 3 : 30
     
 
 

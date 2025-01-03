@@ -342,9 +342,10 @@ def monitor_overall_pnl(user_mtm, pnl_dict):  # MONITOR OVERALL MTM
 				market_closed_tm = dt.strptime('15:30:00', '%H:%M:%S').time()
 				open_order = Orders.objects.filter( fk_strategy__fk_strategy__fk_user_id = user_obj.id, status='OPEN', fk_strategy__pos_status = 'OPEN',  created_at__gt=prev_day_11pm, is_exit = False).exists()
 				if cur_time.time() >= square_off_time and open_order :
-					try: exit_order(user_obj.id, None, pnl_dict, 'AUTO SQUARE-OFF MARKET TIME IS UP', None, None, False)
-					except: ErrorLog.objects.create(error=traceback.format_exc())
-					threading.Thread(target=remove_pending_position, args=(user_obj.id, 'SQUARE OFF',)).start()
+					pass
+					# try: exit_order(user_obj.id, None, pnl_dict, 'AUTO SQUARE-OFF MARKET TIME IS UP', None, None, False)
+					# except: ErrorLog.objects.create(error=traceback.format_exc())
+					# threading.Thread(target=remove_pending_position, args=(user_obj.id, 'SQUARE OFF',)).start()
 				else:
 					if user_obj.trading_mode == 'Live':
 						_target = float(tsm_obj.live_target) if tsm_obj and tsm_obj.live_target else None
@@ -462,59 +463,4 @@ def monitor_square_off_positions():
 	except:
 		traceback.print_exc()
 		ErrorLog.objects.create(error=traceback.format_exc())
-
-
-from django.conf import settings
-
-
-
-# Path where your 300 CSV files are stored
-# import os
-# input_dir = f'{settings.BASE_DIR}/fno_data/'  
-# csv_files = [os.path.join(input_dir, f) for f in os.listdir(input_dir) if f.endswith('.csv')]
-
-# # Store iterators for each file
-# file_iterators = {file: iter(pd.read_csv(file).iterrows()) for file in csv_files}
-
-# def process_csv_file(file_name):
-#     try:
-#         while True:
-#             index, row = next(file_iterators[file_name])
-#             update_td = {
-#                 'symbol': os.path.basename(file_name).replace('.csv', ''),  # Extract symbol from filename
-#                 'ltp': row['ltp'],
-#                 'time': row['timestamp']
-#             }
-#             async_to_sync(channel_layer.group_send)(
-#                 "Test_Consumer",
-#                 {
-#                     "type": "send_live_data",
-#                     "value": {'reply_market': update_td}
-#                 }
-#             )
-#             tm.sleep(1)
-
-#     except StopIteration:
-#         print(f"End of data for {file_name}")
-#     except Exception as e:
-#         print(f"Error processing {file_name}: {e}")
-#         traceback.print_exc()
-
-# tl = Timeloop()
-# @tl.job(interval=timedelta(seconds=1))
-# def start_parallel_processing():
-#     try:
-#         threads = []
-#         for file_name in csv_files:
-#             thread = threading.Thread(target=process_csv_file, args=(file_name,))
-#             thread.start()
-#             threads.append(thread)
-
-#         for thread in threads:
-#             thread.join()
-#         tl.stop()
-#     except Exception as e:
-#         print(f"An error occurred: {e}")
-#         traceback.print_exc()
-
 

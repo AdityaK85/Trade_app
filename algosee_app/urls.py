@@ -6,6 +6,7 @@ from .views import *
 web_urls = [
     path('', Login),
     path('index/', index),
+    path('technical-chart/', technical_chart),
 ]
 
 ajax_urls = [

@@ -339,7 +339,7 @@ def save_target_sl_other_setup(request):
         elif change_type == 'high_price':
             pos_obj.high_price = value
             send_on_front = pos_obj.high_price
-        elif change_type == 'low_price':
+        elif change_type == 'entry_price':
             pos_obj.low_price = value
             send_on_front = pos_obj.low_price
         elif change_type == 'tsl':

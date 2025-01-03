@@ -45,7 +45,22 @@
                 
                 <td  style="font-weight: bold; width: 95px; min-width: 74px;" class="nfty_{{i.subscribe_token}}_ltp" >- </td>
                 <td  style="width: 74px; min-width: 95px;" id="pnl_{{i.id}}"  >- </td>
+
+                {% if i.order_on == 'Limit' and i.order_obj.entryPrice is none  %}
+                <td  style="width: 10%;"  id="entry_price"  ><span class="mx-2 change_td_to_input" data-id='{{i.id}}' data-type="entry_price"  style="display: flex;justify-content: center;cursor: pointer" id="entry_price_{{i.id}}" >{% if i.low_price %}{{ i.low_price|floatformat:2 }}{% endif %}</span> 
+                    <i onclick="
+                    change_td_to_input(
+                    this, 
+                    'entry_price_{{i.id}}', 
+                    'entry_price_{{i.id}}_icon', 
+                    'entry_price', 
+                    '{{i.id}}', 
+                    'lot_size_{{i.id}}')" id="entry_price_{{i.id}}_icon" class="fas fa-pencil-alt edit-icon" style="cursor: pointer;{% if i.order_obj.entryPrice %}display:none{% endif %}"></i>   </td>
+                {% else %}
                 <td  id="entry_{{i.id}}" > {% if i.order_obj.entryPrice %} {{i.order_obj.entryPrice|floatformat:2}} {% else %} - {% endif %} </td>
+                {% endif %}
+
+                
                 <td  id="exit_{{i.id}}" > {% if i.order_obj.exitPrice %} {{i.order_obj.exitPrice|floatformat:2}} {% else %} - {% endif %}  </td>
                 <td  id="status_{{i.id}}" > 
                         {% if i.order_obj.status %} 
